@@ -4,13 +4,15 @@ defmodule Protohacker.Application do
   @moduledoc false
   use Application
 
-  alias Protohacker.EchoserverAcceptor
+  alias Protohacker.Echo
+  alias Protohacker.TcpAcceptor
+
   require Logger
 
   @impl true
   def start(_type, _args) do
     children = [
-      EchoserverAcceptor,
+      {Task, fn -> TcpAcceptor.start_link(5555,&Echo.handle/1, nil) end},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
