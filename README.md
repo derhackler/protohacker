@@ -1,21 +1,48 @@
 # Protohacker
 
-**TODO: Add description**
+Implementation of the [Protohackers](https://protohackers.com) challenges
 
-## Installation
+## Setup dev environment
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `protohacker` to your list of dependencies in `mix.exs`:
+  - install elixir 1.14
+  - install docker
 
-```elixir
-def deps do
-  [
-    {:protohacker, "~> 0.1.0"}
-  ]
-end
+## Try Locally
+
+The server will listen on port 5555
+
+run `iex -S mix` to start the server locally
+
+run `telnet 127.0.0 5555` to test via telnet
+
+## Publish to Stackpath
+
+### build image and publish to docker registry
+
+```bash
+docker build -t derhackler/protohack:0.3.0 .
+docker push derhackler/protohack:0.3.0
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/protohacker>.
+### deploy to stackpath prerequisite
 
+1. Register an account on stackpath.com
+2. Create a new stack called 'protohack'
+3. Create an API Token in the UI
+4. Set your environment variables:
+
+```bash
+export STACKPATH_CID=[YOUR_CLIENT_ID]
+export STACKPATH_CS=[YOUR_CLIENT_SECRET]
+```
+
+5. Compile the project `mix compile`
+
+### deploy
+
+6. run `mix my.deploy derhackler/protohack:0.3.0`
+7. copy the ip address from the ui
+
+### cleanup
+
+delete the workload via the stackpath ui
