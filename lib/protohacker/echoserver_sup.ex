@@ -1,13 +1,15 @@
 defmodule Protohacker.TcpAcceptor do
   require Logger
 
-  def start_link(port, handler, options) do
+  def start_link(port, handler, options \\ []) do
+
+    options = Keyword.merge([packet: :raw, active: false, reuseaddr: true], options)
     # handler is a function that should be called to dispatch the socket to
     # it's then on its own
     # ideally ther is a pool of acceptors so that connections
     # can be established in parallel
     Task.async(fn ->
-      {:ok, listen_socket} =:gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
+      {:ok, listen_socket} =:gen_tcp.listen(port, [:binary | options] )
       accept(listen_socket, handler)
     end)
 
