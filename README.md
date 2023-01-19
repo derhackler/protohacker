@@ -1,6 +1,10 @@
 # Protohacker
 
+<a href="https://github.com/derhackler/protohacker/actions"><img src="https://github.com/derhackler/protohacker/actions/workflows/elixir.yml/badge.svg?branch=main" alt="build and test badge"></a>
+
 Implementation of the [Protohackers](https://protohackers.com) challenges
+
+
 
 ## Setup dev environment
 
