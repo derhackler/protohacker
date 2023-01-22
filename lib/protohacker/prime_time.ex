@@ -10,8 +10,9 @@ defmodule Protohacker.PrimeTime do
       {:ok, data} ->
         Logger.info(data)
 
-        with {:ok, json} when is_map(json) <- Jason.decode(data),
-             %{"method" => "isPrime", "number" => number} when is_number(number) <- json do
+        with {:ok, json} when is_map(json)                                        <- Jason.decode(data),
+             %{"method" => "isPrime", "number" => number} when is_number(number)  <- json do
+
           resp = Jason.encode!(%{"method" => "isPrime", "prime" => is_prime?(number)}) <> "\n"
           Logger.info(resp)
 
@@ -25,7 +26,7 @@ defmodule Protohacker.PrimeTime do
           _ ->
             Logger.info("malformed")
             :gen_tcp.send(socket, "malformed\n")
-            :gen_tcp.close(socket)
+            :gen_tcp.shutdown(socket, :read_write)
         end
     end
   end

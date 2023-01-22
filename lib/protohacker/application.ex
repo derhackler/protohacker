@@ -14,7 +14,7 @@ defmodule Protohacker.Application do
   def start(_type, _args) do
     children = [
     # {Task, fn -> TcpAcceptor.start_link(5555, &Echo.handle/1, nil) end},
-      {Task, fn -> TcpAcceptor.start_link(5555, &PrimeTime.handle/1, [packet: :line]) end},
+      {Task, fn -> TcpAcceptor.start_link(5555, &PrimeTime.handle/1, [packet: :line, packet_size: 100_000, buffer: 100_000]) end},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -22,4 +22,5 @@ defmodule Protohacker.Application do
     opts = [strategy: :one_for_one, name: __MODULE__]
     Supervisor.start_link(children, opts)
   end
+
 end
