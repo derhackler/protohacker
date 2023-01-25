@@ -8,13 +8,13 @@ defmodule Protohacker.PrimeTime do
   defp do_recv(socket, length) do
     case :gen_tcp.recv(socket, length) do
       {:ok, data} ->
-        Logger.info(data)
+        Logger.debug(data)
 
         with {:ok, json} when is_map(json)                                        <- Jason.decode(data),
              %{"method" => "isPrime", "number" => number} when is_number(number)  <- json do
 
           resp = Jason.encode!(%{"method" => "isPrime", "prime" => is_prime?(number)}) <> "\n"
-          Logger.info(resp)
+          Logger.debug(resp)
 
           :gen_tcp.send(
             socket,
@@ -24,10 +24,14 @@ defmodule Protohacker.PrimeTime do
           do_recv(socket, length)
         else
           _ ->
-            Logger.info("malformed")
+            Logger.debug("malformed")
             :gen_tcp.send(socket, "malformed\n")
             :gen_tcp.shutdown(socket, :read_write)
         end
+
+      {:error, :closed} ->
+          Logger.debug(%{:message => "client closed socket. aboout to close too..."})
+          :gen_tcp.close(socket)
     end
   end
 

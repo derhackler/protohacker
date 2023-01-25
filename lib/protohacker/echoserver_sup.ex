@@ -8,7 +8,7 @@ defmodule Protohacker.TcpAcceptor do
     # it's then on its own
     # ideally ther is a pool of acceptors so that connections
     # can be established in parallel
-    Task.async(fn ->
+    Task.start_link(fn ->
       {:ok, listen_socket} =:gen_tcp.listen(port, [:binary | options] )
       accept(listen_socket, handler)
     end)
