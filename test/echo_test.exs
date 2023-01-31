@@ -4,12 +4,12 @@ defmodule EchoTest do
 
   def getNewConnection() do
     Logger.debug("about to connect...")
-    {:ok, socket} = :gen_tcp.connect('127.0.0.1', 5555, [:binary, active: false])
+    {:ok, socket} = :gen_tcp.connect('127.0.0.1', 5001, [:binary, active: false])
     socket
   end
 
   def send(socket, payload) do
-    Logger.debug("connected. about so send...")
+    Logger.debug("about so send...")
     :ok = :gen_tcp.send(socket, payload)
 
     Logger.debug("sent. try to receive answer...")
