@@ -3,11 +3,9 @@ defmodule Protohacker.BudgetChat do
 
   use GenServer
 
-  @impl true
   def start_link(socket) do
     GenServer.start_link(__MODULE__, socket, [])
   end
-  # chatclient
 
 
   @impl true
@@ -18,7 +16,7 @@ defmodule Protohacker.BudgetChat do
   @impl true
   def handle_continue(:send_welcome, state)  do
     welcome_message() |> send_msg(state.socket)
-    {:ok, state, {:continue, :set_clientname}}
+    {:noreply, state, {:continue, :set_clientname}}
   end
 
 
@@ -27,9 +25,10 @@ defmodule Protohacker.BudgetChat do
     case set_client_name(socket) do
       {:ok, name} ->
         user_joined(name) |> send_msg(socket)
-        {:no_reply, %{socket: socket, name: name}}
+        {:noreply, %{socket: socket, name: name}}
       {:error, msg} ->
-        send_error(socket,msg)
+        msg |> send_msg(socket)
+        close_silently(socket)
         {:stop, :normal}
     end
   end
@@ -39,6 +38,7 @@ defmodule Protohacker.BudgetChat do
   end
 
   def user_joined(username) do
+      # trim \n
       "* #{username} has joined"
   end
 
@@ -46,8 +46,7 @@ defmodule Protohacker.BudgetChat do
     :gen_tcp.recv(socket, 0)
   end
 
-  def send_error(socket,msg) do
-    #close silently
+  def close_silently(socket) do
     :gen_tcp.close(socket)
   end
 
