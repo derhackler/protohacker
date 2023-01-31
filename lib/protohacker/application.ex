@@ -16,7 +16,8 @@ defmodule Protohacker.Application do
     children = [
       %{id: :challange1_echo,             start: {TcpAcceptor, :start_link, [5001, &Echo.handle/1, []]}},
       %{id: :challange2_prime_time,       start: {TcpAcceptor, :start_link, [5002, &PrimeTime.handle/1, [packet: :line, packet_size: 100_000, buffer: 100_000]]}},
-      %{id: :challange3_means_to_an_end,  start: {TcpAcceptor, :start_link, [5003, &MeansToAnEnd.handle/1, [packet: :raw, packet_size: 100_000, buffer: 100_000]]}}
+      %{id: :challange3_means_to_an_end,  start: {TcpAcceptor, :start_link, [5003, &MeansToAnEnd.handle/1, [packet: :raw, packet_size: 100_000, buffer: 100_000]]}},
+      %{id: :challange4_budget_chat,      start: {TcpAcceptor, :start_link, [5004, &BudgetChat.handle/1, [packet: :line, packet_size: 100_000, buffer: 100_000]]}},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
